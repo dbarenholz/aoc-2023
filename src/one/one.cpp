@@ -97,15 +97,15 @@ int main() {
   vec<str> lines = input();
 
   ll sum = 0;
-  for (auto line : lines) {
+  for (const auto &line : lines) {
     str res = regex_replace(line, basic_regex("[a-z]*"), "");
-    
+
     res = res.length() == 1 ? res + "" + res : res;
-    
+
     str fst = str(1, res.at(0));
     str lst = str(1, res.at(res.length() - 1));
     res = fst + lst;
-    
+
     ll val = stol(res);
     sum += val;
   }
