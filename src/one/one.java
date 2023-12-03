@@ -24,8 +24,8 @@ class one {
     return lines;
   }
 
+  // note: the string 'oneight' should become '18' as number.
   List<String> preprocess(List<String> input) {
-
     List<Pair<String, String>> replacements = Arrays.asList(
         new Pair<String, String>("one", "1"),
         new Pair<String, String>("two", "2"),
@@ -41,28 +41,28 @@ class one {
         .map(s -> {
           String res = "";
 
-          // For each index i try and find a valid replacement for
-          // s.substring(i, i + replacement.length())
-          // by looping through replacements list
           for (int i = 0; i < s.length(); i++) {
             for (Pair<String, String> repl : replacements) {
-              // Note: Java throws error for substring -- catch it and do nothing
+
               String check = "[OUT_OF_BOUNDS :(]";
               try {
                 check = s.substring(i, i + repl.a.length());
               } catch (StringIndexOutOfBoundsException e) {
               }
-              // We found a match here; add replacement and increment loop counter
+
+              // We found a match here; add replacement
+              // Note that we do not care about incrementing 'i';
+              // by not incrementing 'i', we correctly parse 'oneight' as 18.
               if (check.equals(repl.a)) {
                 res += repl.b;
-                i += repl.a.length() - 1;
                 break;
               }
             }
             // No match; add character and continue -- again ignore out of bounds exceptions
             try {
               res += s.charAt(i);
-            } catch (StringIndexOutOfBoundsException e) {}
+            } catch (StringIndexOutOfBoundsException e) {
+            }
           }
           return res;
         })
@@ -71,11 +71,11 @@ class one {
 
   int computeSum(List<String> input) {
     return input.stream()
-        .map(s -> s.replaceAll("[a-z]*", ""))
-        .map(s -> s.length() == 1 ? s + "" + s : s)
-        .map(s -> s.charAt(0) + "" + s.charAt(s.length() - 1))
-        .map(s -> Integer.parseInt(s))
-        .reduce(0, (a, b) -> a + b);
+        .map(s -> s.replaceAll("[a-z]*", "")) // ignore all letters
+        .map(s -> s.length() == 1 ? s + "" + s : s) // if only 1 character, double it
+        .map(s -> s.charAt(0) + "" + s.charAt(s.length() - 1)) // grab first and last character
+        .map(s -> Integer.parseInt(s)) // pretend it's an integer
+        .reduce(0, (a, b) -> a + b); // and sum everything
   }
 
   private void run() throws IOException {
