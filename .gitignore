@@ -415,3 +415,7 @@ dist
 
 ## Working files
 working/*
+
+
+## inputs for AOC
+input.txt
